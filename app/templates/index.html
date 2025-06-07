@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Resume Builder</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <script src="/static/js/scripts.js" defer></script>
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+</head>
+<body>
+  <h1>AI Resume Builder</h1>
+
+  <form id="resume-form" method="POST">
+
+      <div id="resume-actions">
+        <button type="button" onclick="loadExistingResume()">Load Existing Resume</button>
+      </div>
+
+    <!-- Background About You -->
+    <div>
+      <h2>Background About You</h2>
+      <textarea id="user-background" placeholder="Write about your past experiences, education, achievements..."></textarea>
+    </div>
+
+    <!-- Summary -->
+    <div>
+      <h2>Professional Summary</h2>
+      <textarea id="summary" placeholder="A brief summary about yourself..."></textarea>
+    </div>
+
+    <!-- Personal Info -->
+    <div>
+      <h2>Personal Info</h2>
+
+      <label>Full Name</label>
+      <input id="name" type="text" placeholder="Full Name" required>
+
+      <label>Email</label>
+      <input id="email" type="email" placeholder="Email" required>
+
+      <label>Phone Number</label>
+      <input id="phone" type="text" placeholder="Phone Number">
+
+      <label>LinkedIn</label>
+      <div class="link-pair">
+        <input type="text" placeholder="e.g. LinkedIn" class="link-title-input">
+        <input type="url" placeholder="https://linkedin.com/in/yourname" class="link-url-input">
+      </div>
+
+      <label>GitHub</label>
+      <div class="link-pair">
+        <input type="text" placeholder="e.g. GitHub" class="link-title-input">
+        <input type="url" placeholder="https://github.com/yourname" class="link-url-input">
+      </div>
+
+      <label>Personal Website</label>
+      <div class="link-pair">
+        <input type="text" placeholder="e.g. Portfolio" class="link-title-input">
+        <input type="url" placeholder="https://yourdomain.com" class="link-url-input">
+      </div>
+    </div>
+
+
+    <!-- Education -->
+    <div>
+      <h2>Education</h2>
+      <div id="education-container">
+        <div class="education-entry">
+          <label>University / Institution</label>
+          <input type="text" placeholder="e.g. MIT" class="university-input">
+
+          <label>Location</label>
+          <input type="text" placeholder="e.g. Cambridge, USA" class="location-input">
+
+          <label>Degree / Program</label>
+          <input type="text" placeholder="e.g. B.Sc. Computer Science" class="degree-input">
+
+          <label>GPA</label>
+          <input type="text" placeholder="e.g. 3.9 / 4.0" class="gpa-input">
+
+          <label>Start Date</label>
+          <input type="text" placeholder="e.g. Fall 2020" class="start-date-input">
+
+          <label>End Date</label>
+          <input type="text" placeholder="e.g. May 2024 or Present" class="end-date-input">
+
+          <!-- 🔥 Remove button -->
+          <button type="button" class="remove-btn" onclick="removeSection(this)">🗑 Remove Education</button>
+        </div>
+      </div>
+
+      <button type="button" class="add-education-btn" onclick="addEducation()">+ Add Education</button>
+    </div>
+
+    <!-- Experience -->
+    <div>
+      <h2>Experience</h2>
+      <div id="experience-container">
+        <div class="experience-entry">
+          <label>Company Name</label>
+          <input type="text" placeholder="e.g. Google" class="company-input">
+
+          <label>Location</label>
+          <input type="text" placeholder="e.g. Mountain View, USA" class="location-input">
+
+          <label>Title / Position</label>
+          <input type="text" placeholder="e.g. Software Engineer" class="title-input">
+
+          <label>Start Date</label>
+          <input type="text" placeholder="e.g. Jan 2022" class="start-date-input">
+
+          <label>End Date</label>
+          <input type="text" placeholder="e.g. Present or May 2024" class="end-date-input">
+
+          <div class="bullet-container">
+            <label>Bullet Points</label>
+            <div class="bullet-row">
+              <textarea placeholder="e.g. Designed scalable backend systems..." class="bullet-input"></textarea>
+              <button type="button" class="generate-ai-btn" onclick="generateExperienceBullet(this)">⚡ Generate with AI</button>
+              <button type="button" class="remove-btn" onclick="removeBullet(this)">🗑</button>
+            </div>
+          </div>
+
+
+          <button type="button" class="add-bullet-btn" onclick="addExperienceBullet(this)">+ Add Bullet</button>
+
+          <!-- 🔥 Remove button -->
+          <button type="button" class="remove-btn" onclick="removeSection(this)">🗑 Remove Experience</button>
+
+        </div>
+      </div>
+
+      <button type="button" class="add-experience-btn" onclick="addExperience()">+ Add Experience</button>
+    </div>
+
+
+    <!-- Skills -->
+    <div>
+      <h2>Skills</h2>
+      <div id="skills-container">
+      <div class="skill-category">
+        <label>Skill Category</label>
+        <input type="text" placeholder="e.g. Programming Languages" class="skill-title-input">
+
+        <label>Skills (comma-separated)</label>
+        <input type="text" placeholder="e.g. Python, Java, C++" class="skill-values-input">
+
+        <!-- 🔥 Remove button -->
+        <button type="button" class="remove-btn" onclick="removeSection(this)">🗑 Remove Skill Category</button>
+      </div>
+
+      <!-- Future: dynamically add more categories here -->
+      <button type="button" class="add-skill-btn" onclick="addSkillCategory()">+ Add Skill Category</button>
+      </div>
+    </div>
+
+    <!-- Projects -->
+    <div>
+      <h2>Projects</h2>
+      <div id="project-container">
+        <div class="project-entry">
+          <label>Project Title</label>
+          <input type="text" placeholder="e.g. AI Resume Builder" class="project-title-input">
+
+          <label>Project Link (optional)</label>
+          <input type="url" placeholder="e.g. https://github.com/yourname/project" class="project-link-input">
+
+          <div class="bullet-container">
+          <label>Bullet Points</label>
+
+          <div class="bullet-row">
+            <textarea placeholder="e.g. Built a dynamic resume generator using LaTeX..." class="project-bullet-input"></textarea>
+            <button type="button" class="generate-ai-btn" onclick="generateProjectBullet(this)">⚡ Generate with AI</button>
+            <button type="button" class="remove-btn" onclick="removeBullet(this)">🗑</button>
+          </div>
+        </div>
+
+          <button type="button" class="add-bullet-btn" onclick="addProjectBullet(this)">+ Add Bullet</button>
+
+          <!-- 🔥 Remove button -->
+          <button type="button" class="remove-btn" onclick="removeSection(this)">🗑 Remove Project</button>
+
+        </div>
+      </div>
+
+      <button type="button" class="add-project-btn" onclick="addProject()">+ Add Project</button>
+    </div>
+
+
+    <!-- Job Description -->
+    <div>
+      <h2>Job Description</h2>
+      <textarea id="job-desc" placeholder="Paste the job description here..."></textarea>
+    </div>
+
+
+
+    <!-- Actions -->
+    <div>
+      <button type="submit">Generate Resume PDF</button>
+      <button type="button" onclick="resetAllFields()">Reset All Fields</button>
+    </div>
+  </form>
+
+<!-- Templates -->
+<template id="education-template">
+  <div class="education-entry">
+    <label>University / Institution</label>
+    <input type="text" placeholder="e.g. MIT" class="university-input">
+
+    <label>Location</label>
+    <input type="text" placeholder="e.g. Cambridge, USA" class="location-input">
+
+    <label>Degree / Program</label>
+    <input type="text" placeholder="e.g. B.Sc. Computer Science" class="degree-input">
+
+    <label>GPA</label>
+    <input type="text" placeholder="e.g. 3.9 / 4.0" class="gpa-input">
+
+    <label>Start Date</label>
+    <input type="text" placeholder="e.g. Fall 2020" class="start-date-input">
+
+    <label>End Date</label>
+    <input type="text" placeholder="e.g. May 2024 or Present" class="end-date-input">
+
+    <button type="button" class="remove-btn" onclick="removeSection(this)">🗑 Remove Education</button>
+  </div>
+</template>
+
+<template id="experience-template">
+  <div class="experience-entry">
+    <label>Company Name</label>
+    <input type="text" placeholder="e.g. Google" class="company-input">
+
+    <label>Location</label>
+    <input type="text" placeholder="e.g. Mountain View, USA" class="location-input">
+
+    <label>Title / Position</label>
+    <input type="text" placeholder="e.g. Software Engineer" class="title-input">
+
+    <label>Start Date</label>
+    <input type="text" placeholder="e.g. Jan 2022" class="start-date-input">
+
+    <label>End Date</label>
+    <input type="text" placeholder="e.g. Present or May 2024" class="end-date-input">
+
+    <div class="bullet-container">
+      <label>Bullet Points</label>
+      <div class="bullet-row">
+        <textarea placeholder="e.g. Designed scalable backend systems..." class="bullet-input"></textarea>
+        <button type="button" class="generate-ai-btn" onclick="generateExperienceBullet(this)">⚡ Generate with AI</button>
+        <button type="button" class="remove-btn" onclick="removeBullet(this)">🗑</button>
+      </div>
+    </div>
+
+    <button type="button" class="add-bullet-btn" onclick="addExperienceBullet(this)">+ Add Bullet</button>
+    <button type="button" class="remove-btn" onclick="removeSection(this)">🗑 Remove Experience</button>
+  </div>
+</template>
+
+<template id="project-template">
+  <div class="project-entry">
+    <label>Project Title</label>
+    <input type="text" placeholder="e.g. AI Resume Builder" class="project-title-input">
+
+    <label>Project Link (optional)</label>
+    <input type="url" placeholder="e.g. https://github.com/yourname/project" class="project-link-input">
+
+    <div class="bullet-container">
+      <label>Bullet Points</label>
+      <div class="bullet-row">
+        <textarea placeholder="e.g. Built a dynamic resume generator using LaTeX..." class="project-bullet-input"></textarea>
+        <button type="button" class="generate-ai-btn" onclick="generateProjectBullet(this)">⚡ Generate with AI</button>
+        <button type="button" class="remove-btn" onclick="removeBullet(this)">🗑</button>
+      </div>
+    </div>
+
+    <button type="button" class="add-bullet-btn" onclick="addProjectBullet(this)">+ Add Bullet</button>
+    <button type="button" class="remove-btn" onclick="removeSection(this)">🗑 Remove Project</button>
+  </div>
+</template>
+
+<template id="skill-template">
+  <div class="skill-category">
+    <label>Skill Category</label>
+    <input type="text" placeholder="e.g. Programming Languages" class="skill-title-input">
+
+    <label>Skills (comma-separated)</label>
+    <input type="text" placeholder="e.g. Python, Java, C++" class="skill-values-input">
+
+    <button type="button" class="remove-btn" onclick="removeSection(this)">🗑 Remove Skill Category</button>
+  </div>
+</template>
+
+</body>
+</html>
