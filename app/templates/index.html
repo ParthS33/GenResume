@@ -5,15 +5,20 @@
   <title>AI Resume Builder</title>
   <link rel="stylesheet" href="/static/css/styles.css">
   <script src="/static/js/scripts.js" defer></script>
+  <script src="/static/js/formToJson.js" defer></script>
+  <script src="/static/js/submit.js" defer></script>
+  <script src="/static/js/fillFormWithResumeData.js" defer></script>
   <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
 </head>
 <body>
   <h1>AI Resume Builder</h1>
 
-  <form id="resume-form" method="POST">
+  <form id="resume-form">
 
       <div id="resume-actions">
         <button type="button" onclick="loadExistingResume()">Load Existing Resume</button>
+        <input type="file" id="resume-file-input" accept=".json" style="display: none;" />
+        <div id="selected-filename" style="margin-top: 5px; font-style: italic;"></div>
       </div>
 
     <!-- Background About You -->
@@ -43,19 +48,19 @@
 
       <label>LinkedIn</label>
       <div class="link-pair">
-        <input type="text" placeholder="e.g. LinkedIn" class="link-title-input">
+        <input type="hidden" value="LinkedIn" class="link-title-input">
         <input type="url" placeholder="https://linkedin.com/in/yourname" class="link-url-input">
       </div>
 
       <label>GitHub</label>
       <div class="link-pair">
-        <input type="text" placeholder="e.g. GitHub" class="link-title-input">
+        <input type="hidden" value="GitHub" class="link-title-input">
         <input type="url" placeholder="https://github.com/yourname" class="link-url-input">
       </div>
 
       <label>Personal Website</label>
       <div class="link-pair">
-        <input type="text" placeholder="e.g. Portfolio" class="link-title-input">
+        <input type="hidden" value="Website" class="link-title-input">
         <input type="url" placeholder="https://yourdomain.com" class="link-url-input">
       </div>
     </div>
@@ -121,7 +126,7 @@
             </div>
           </div>
 
-
+          <button type="button" class="generate-full-ai-btn" onclick="generateFullExperienceAI(this)">⚡ Generate Entire Experience with AI</button>
           <button type="button" class="add-bullet-btn" onclick="addExperienceBullet(this)">+ Add Bullet</button>
 
           <!-- 🔥 Remove button -->
@@ -150,8 +155,10 @@
       </div>
 
       <!-- Future: dynamically add more categories here -->
-      <button type="button" class="add-skill-btn" onclick="addSkillCategory()">+ Add Skill Category</button>
+<!--      <button type="button" class="add-skill-btn" onclick="addSkillCategory()">+ Add Skill Category</button>-->
       </div>
+        <button type="button" class="add-skill-btn" onclick="addSkillCategory()">+ Add Skill Category</button>
+
     </div>
 
     <!-- Projects -->
@@ -197,8 +204,9 @@
 
     <!-- Actions -->
     <div>
-      <button type="submit">Generate Resume PDF</button>
+      <button type="button" id="generate-btn">Generate Resume PDF</button>
       <button type="button" onclick="resetAllFields()">Reset All Fields</button>
+      <button type="button" id="save-btn">💾 Save Resume Data</button>
     </div>
   </form>
 
@@ -253,6 +261,7 @@
       </div>
     </div>
 
+    <button type="button" class="generate-full-ai-btn" onclick="generateFullExperienceAI(this)">⚡ Generate Entire Experience with AI</button>
     <button type="button" class="add-bullet-btn" onclick="addExperienceBullet(this)">+ Add Bullet</button>
     <button type="button" class="remove-btn" onclick="removeSection(this)">🗑 Remove Experience</button>
   </div>

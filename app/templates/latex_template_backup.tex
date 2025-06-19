@@ -1,0 +1,169 @@
+\documentclass[a4paper]{article}
+    \usepackage{fullpage}
+    \usepackage{amsmath}
+    \usepackage{amssymb}
+    \usepackage{textcomp}
+    \usepackage[utf8]{inputenc}
+    \usepackage[T1]{fontenc}
+    \usepackage{mathptmx}
+    \textheight=10in
+    \pagestyle{empty}
+    \raggedright
+    \usepackage[left=0.4in,right=0.4in,bottom=0.2in,top=0.8in]{geometry}
+
+\pdfgentounicode=1
+
+\usepackage{hyperref}
+\def\bull{\vrule height 0.8ex width .7ex depth -.1ex }
+
+% DEFINITIONS FOR RESUME %%%%%%%%%%%%%%%%%%%%%%%
+{% raw %}
+\newcommand{\area} [2] {
+    \vspace*{-9pt}
+    \begin{verse}
+        \textbf{#1}   #2
+    \end{verse}
+}
+{% endraw %}
+
+\newcommand{\lineunder} {
+    \vspace*{-8pt} \\
+    \hspace*{-18pt} \hrulefill \\
+}
+
+{% raw %}
+\newcommand{\header} [1] {
+    {\hspace*{-18pt}\vspace*{6pt} \textsc{#1}}
+    \vspace*{-6pt} \lineunder
+}
+{% endraw %}
+
+{% raw %}
+\newcommand{\employer} [3] {
+    { \textbf{#1} (#2)\\ \underline{\textbf{\emph{#3}}}\\  }
+}
+{% endraw %}
+
+{% raw %}
+\newcommand{\contact} [3] {
+    \vspace*{-10pt}
+    \begin{center}
+        {\Huge \scshape {#1}}\\
+        #2 \\ #3
+    \end{center}
+    \vspace*{-8pt}
+}
+{% endraw %}
+
+\newenvironment{achievements}{
+    \begin{list}
+        {$\bullet$}{\topsep 0pt \itemsep -2pt}}{\vspace*{4pt}
+    \end{list}
+}
+
+{% raw %}
+\newcommand{\schoolwithcourses} [4] {
+    \textbf{#1} #2 $\bullet$ #3\\
+    #4 \\
+    \vspace*{5pt}
+}
+{% endraw %}
+
+{% raw %}
+\newcommand{\school} [4] {
+    \textbf{#1} #2 $\bullet$ #3\\
+    #4 \\
+}
+{% endraw %}
+% END RESUME DEFINITIONS %%%%%%%%%%%%%%%%%%%%%%%
+
+    \begin{document}
+\vspace*{-40pt}
+
+
+
+%==== Profile ====%
+\vspace*{-10pt}
+\begin{center}
+  {\Huge \scshape {{ personalInfo.name }}}\\
+  \vspace{4pt}
+  $\cdot$ \href{mailto:{{ personalInfo.email }}}{{ '{' }}{{ personalInfo.email }}{{ '}' }}
+  $\cdot$ {{ personalInfo.phone }}
+  {%- for link in personalInfo.links if link.url %} $\cdot$ \href{{ '{' }}{{ link.url }}{{ '}' }}{{ '{' }}{{ link.title }}{{ '}' }}{% endfor %} \\
+\end{center}
+
+\header{Summary}
+\textbf{{ '{' }}{{ summary }}{{ '}' }}
+
+\vspace*{2mm}
+
+\header{Skills}
+%\vspace{-2mm}
+\noindent
+{% for category in skills %}
+\textbf{{ '{' }}{{ category.title }}{{ '}' }}: {{ category.titleValues | join(", ") }} \\
+{% endfor %}
+\vspace{2mm}
+
+
+%==== Experience ====%
+\header{Work Experience}
+\vspace{1mm}
+
+{% for exp in experience %}
+\textbf{{ '{' }}{{ exp.company | trim }}{{ '}' }} \hfill {{ exp.location }}\\
+\textsc{{ '{' }}{{ exp.title }}{{ '}' }} \hfill {{ exp.startDate }} - {{ exp.endDate }}\\
+\vspace{-1mm}
+\begin{list}{\textbullet}{\leftmargin=1em \itemsep 0pt}
+    {% for bullet in exp.bullets %}
+    \item {{ bullet }}
+    {% endfor %}
+\end{list}
+{% endfor %}
+
+
+
+%==== Projects ====%
+\header{Projects}
+\vspace{1mm}
+
+% Define a custom environment for lists without markers
+{% raw %}
+\newenvironment{nolistmarker}{
+    \begin{list}{}{%
+        \setlength{\itemsep}{2mm}
+        \setlength{\parsep}{0pt}
+        \setlength{\topsep}{0pt}
+        \setlength{\partopsep}{0pt}
+        \setlength{\leftmargin}{0em}
+        \setlength{\rightmargin}{0em}
+        \setlength{\listparindent}{0pt}
+        \setlength{\itemindent}{0pt}
+    }
+}{\end{list}}
+{% endraw %}
+
+\begin{nolistmarker}
+{% for project in projects %}
+    \item \textbf{{ '{' }}{{ project.title | trim }}{{ '}' }}%
+    {% if project.link %} \hfill \href{{ '{' }}{{ project.link | trim }}{{ '}' }}{{ '{' }}{{ project.link_text | default("GitHub") | trim }}{{ '}' }}{% endif %}\\
+    {% for bullet in project.bullets %}
+        {{ bullet | trim }}{% if not loop.last %}\\{% endif %}
+    {% endfor %}
+{% endfor %}
+\end{nolistmarker}
+\vspace{2mm}
+
+
+%==== Education ====%
+\header{Education}
+{% for edu in education %}
+\textbf{{ '{' }}{{ edu.university }}{{ '}' }}\hfill {{ edu.location }}\\
+{{ edu.degree }}
+{% if edu.gpa %} \quad\textit{\textbf{GPA}: {{ edu.gpa }}}{% endif %} \hfill {{ edu.startDate }} - {{ edu.endDate }}\\
+\vspace{2mm}
+{% endfor %}
+
+
+
+\end{document}

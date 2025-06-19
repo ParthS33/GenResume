@@ -37,6 +37,7 @@ Thumbs.db
 
 # Resume outputs
 resume.pdf
+.pdf
 
 # Pytest cache
 .pytest_cache/
@@ -44,3 +45,7 @@ resume.pdf
 # VSCode Python debug
 *.coverage
 htmlcov/
+
+saved_data
+auxil
+output
