@@ -1,6 +1,7 @@
 from jinja2 import Environment, FileSystemLoader
 import os
 import re
+import subprocess
 
 # Escaping function
 def escape_latex(text):
@@ -53,3 +54,25 @@ def generate_latex_from_data(data):
         f.write(rendered_tex)
 
     return output_path
+
+
+def generate_pdf_from_data(data):
+    tex_path = generate_latex_from_data(data)
+    pdf_output_dir = os.path.dirname(tex_path)
+    tex_filename = os.path.basename(tex_path)
+
+    try:
+        for _ in range(2):
+            subprocess.run(
+                ["pdflatex", "-interaction=nonstopmode", tex_filename],
+                cwd=pdf_output_dir,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=True
+            )
+
+        pdf_path = os.path.splitext(tex_path)[0] + ".pdf"
+        return pdf_path
+    except subprocess.CalledProcessError as e:
+        print("❌ LaTeX to PDF compilation failed:", e)
+        return None

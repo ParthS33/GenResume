@@ -49,11 +49,7 @@ window.submitResumeForm = function (event) {
   })
     .then((res) => {
       if (!res.ok) throw new Error("Resume generation failed");
-      return res.json(); // Expect JSON response for now
-    })
-    .then((responseData) => {
-      console.log("✅ Resume data successfully processed:", responseData);
-      alert("Resume data sent and processed (check console).");
+      alert("✅ PDF resume generated and saved to disk.");
     })
     .catch((err) => {
       console.error("❌ Error sending resume data:", err);
@@ -64,6 +60,13 @@ window.submitResumeForm = function (event) {
 window.saveResumeData = function (event) {
   if (event) event.preventDefault();
 
+  const filename = prompt("💾 Enter a name to save this resume as (without .json):");
+  if (!filename || filename.trim() === "") {
+    alert("⚠️ Save cancelled or no filename provided.");
+    return;
+  }
+
+  const cleanFilename = filename.trim().replace(/[^a-zA-Z0-9-_]/g, "_");
   const data = window.getResumeFormData();
 
   fetch("/save-resume", {
@@ -71,7 +74,7 @@ window.saveResumeData = function (event) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({ filename: cleanFilename, data })
   })
     .then((res) => {
       if (!res.ok) throw new Error("Resume saving failed");
@@ -79,13 +82,14 @@ window.saveResumeData = function (event) {
     })
     .then((responseData) => {
       console.log("💾 Resume data saved:", responseData);
-      alert("Resume data saved successfully.");
+      alert(`✅ Resume saved as "${cleanFilename}.json"`);
     })
     .catch((err) => {
       console.error("❌ Error saving resume data:", err);
       alert("Error saving: " + err.message);
     });
 };
+
 
 window.loadExistingResume = function () {
   document.getElementById("resume-file-input").click();

@@ -1,10 +1,32 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   // Reset all fields
-  window.resetAllFields = function () {
-    if (confirm("Are you sure you want to clear all fields?")) {
-      document.getElementById("resume-form").reset();
-    }
+    window.resetAllFields = function () {
+    if (!confirm("Are you sure you want to clear all fields?")) return;
+
+    const form = document.getElementById("resume-form");
+    form.reset(); // resets all static inputs
+
+    // Clear all textareas
+    form.querySelectorAll("textarea").forEach(t => t.value = "");
+
+    // Remove dynamic sections
+    document.getElementById("education-container").innerHTML = "";
+    document.getElementById("experience-container").innerHTML = "";
+    document.getElementById("project-container").innerHTML = "";
+    document.getElementById("skills-container").innerHTML = "";
+
+    // Re-add one blank entry for each section
+    addEducation();
+    addExperience();
+    addProject();
+    addSkillCategory();
+
+    // Clear filename display (for loaded resume)
+    const fileNameDisplay = document.getElementById("selected-filename");
+    if (fileNameDisplay) fileNameDisplay.textContent = "";
+
+    window.scrollTo(0, 0);
   };
 
   // Remove a section (education, experience, skill-category, project)
@@ -88,43 +110,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // Placeholder functions for AI
-  window.generateExperienceBullet = function (button) {
-    const textarea = button.parentElement.querySelector("textarea");
-    textarea.value = "Generated experience bullet from AI based on job description.";
-  };
+  window.generateExperienceBullet = generateExperienceBullet;
 
-  window.generateProjectBullet = function (button) {
-    const textarea = button.parentElement.querySelector("textarea");
-    textarea.value = "Generated project bullet from AI based on project context.";
-  };
+  window.generateProjectBullet = generateProjectBullet;
 
 });
 
 
-  window.generateFullExperienceAI = function (button) {
-    const entry = button.closest(".experience-entry");
-
-    // Fill out basic fields
-    entry.querySelector(".company-input").value = "OpenAI";
-    entry.querySelector(".location-input").value = "San Francisco, CA";
-    entry.querySelector(".title-input").value = "Machine Learning Engineer";
-    entry.querySelector(".start-date-input").value = "Jan 2023";
-    entry.querySelector(".end-date-input").value = "Present";
-
-    // Clear existing bullets
-    const bulletContainer = entry.querySelector(".bullet-container");
-    bulletContainer.innerHTML = `
-      <label>Bullet Points</label>
-      <div class="bullet-row">
-        <textarea class="bullet-input">Developed and deployed transformer models for NLP tasks with 20% improved accuracy over baselines.</textarea>
-        <button type="button" class="generate-ai-btn" onclick="generateExperienceBullet(this)">⚡ Generate with AI</button>
-        <button type="button" class="remove-btn" onclick="removeBullet(this)">🗑</button>
-      </div>
-      <div class="bullet-row">
-        <textarea class="bullet-input">Optimized distributed training pipeline, reducing model training time from 12 hours to 5 hours.</textarea>
-        <button type="button" class="generate-ai-btn" onclick="generateExperienceBullet(this)">⚡ Generate with AI</button>
-        <button type="button" class="remove-btn" onclick="removeBullet(this)">🗑</button>
-      </div>
-    `;
-  };
+  window.generateFullExperienceAI = generateFullExperienceAI;
 
