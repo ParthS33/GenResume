@@ -1,7 +1,7 @@
 
 # 📝 AI Resume Builder
 
-A web-based AI-assisted resume builder that lets users generate LaTeX resumes by filling out a dynamic form. Supports saving/loading resume data as JSON and LaTeX export. AI functionality for generating content is planned.
+A web-based AI-assisted resume builder that allows users to generate professional LaTeX resumes by filling out a dynamic form. Supports saving/loading resume data as JSON and exporting directly to PDF. Integrated with a local LLM (Mistral via Ollama) for generating tailored experience bullets, project descriptions, and skill sections.
 
 ---
 
