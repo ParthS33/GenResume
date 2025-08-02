@@ -41,6 +41,11 @@ A web-based AI-assisted resume builder that lets users generate LaTeX resumes by
 
 ```
 ├── app
+│   ├── api
+│   ├── main.py
+│   ├── builder
+│   │   ├── generator.py
+│   │   └── parser.py
 │   ├── static
 │   │   ├── css
 │   │   └── js
@@ -49,10 +54,6 @@ A web-based AI-assisted resume builder that lets users generate LaTeX resumes by
 │   │   └── latex_template.tex
 │   ├── output
 │   └── saved_data
-├── builder
-│   ├── generator.py
-│   ├── parser.py
-├── main.py
 ```
 
 ---
@@ -69,15 +70,13 @@ A web-based AI-assisted resume builder that lets users generate LaTeX resumes by
    poetry run uvicorn main:app --reload
    ```
 
+3. Run the Mistral model via Ollama (for AI features):
+   ```
+   ollama run mistral
+   ```
+
 3. Access the app:
    - Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser
 
 ---
 
-## ✨ Future Ideas
-
-- AI-assisted Job Description tailoring
-- One-click "Download PDF" button
-- Pre-made resume templates (multiple LaTeX designs)
-- LocalStorage save/load (no backend dependency for basic use)
-- Export/import to other formats (Markdown, plain text)
